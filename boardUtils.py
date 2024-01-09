@@ -77,6 +77,9 @@ class Board:
 
         return cellCoords, sectionCoords
 
+    def getCells(self):
+        return [y for x in self.sections.values() for y in x.cells.values()]
+
 class Section:
     def __init__(self,area,coords,board:Board):
         self.rect = FRect(0,0,0,0)
