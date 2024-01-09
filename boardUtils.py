@@ -16,6 +16,7 @@ class Board:
 
     def setSize(self,surface: Surface):
         width, height = surface.get_size()
+        height -= height*0.1
         if width < height:
             fivePer = width * 0.05
             square = int(width - (fivePer*2)) #making square perfectly divisible
@@ -38,7 +39,7 @@ class Board:
         absoluteCoords = self.sectionCoordsToAbsCoords(cellCoords, sectionCoords)
 
         #vertical line check
-        i = 15
+        i = self.size-1
         count = 0
         while i > -1:
             cCoords, sCoords = self.absCoordsToSectionCoords((absoluteCoords[0],i))
@@ -49,7 +50,7 @@ class Board:
         if count > 1: return True
 
         #horizontal line check
-        i = 15
+        i = self.size - 1
         count = 0
         while i > -1:
             cCoords, sCoords = self.absCoordsToSectionCoords((i, absoluteCoords[1]))
