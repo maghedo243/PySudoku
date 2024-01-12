@@ -3,6 +3,8 @@ import math
 import pygame
 from pygame import FRect, Surface
 
+import constants
+
 
 class Board:
     def __init__(self,size):
@@ -13,6 +15,15 @@ class Board:
         for i in range(self.sqrt):
             for j in range(self.sqrt):
                 self.sections[(i,j)] = Section(size,(i,j),self)
+
+    def process_events(self,events):
+        for event in events:
+            if event.type == constants.NUMDROP:
+                for section in self.sections.values():
+                    for cell in section.cells.values():
+                        if cell.rect.collidepoint(event.pos[0],event.pos[1]):
+                            cell.storedNum = event.num
+
 
     def setSize(self,surface: Surface):
         width, height = surface.get_size()

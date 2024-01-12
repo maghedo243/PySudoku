@@ -1,12 +1,13 @@
-from abc import ABC, abstractmethod
-
 import pygame
 from pygame import FRect, Surface
+
+import constants
 
 
 class Draggable:
     def __init__(self):
         self.beingDragged = False
+        self.recentlyActive = (False,None,None)
         self.mousePos = None
         self.x = 0
         self.y = 0
@@ -15,24 +16,22 @@ class Draggable:
         self.centerX = 0
         self.centerY = 0
 
-    def process_events(self,events):
-
+    def process_events(self,events,rect):
         for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and rect.collidepoint(event.pos[0],event.pos[1]):
                 self.beingDragged = True
-                print("DOWN")
+                self.x = event.pos[0]
+                self.y = event.pos[1]
 
-            elif event.type == pygame.MOUSEBUTTONUP:
+            elif event.type == pygame.MOUSEBUTTONUP and self.beingDragged:
                 self.beingDragged = False
                 self.x = self.normalX
                 self.y = self.normalY
-                print(self.x)
-                print("UP")
+                self.recentlyActive = (True,event.pos[0],event.pos[1])
 
             elif event.type == pygame.MOUSEMOTION and self.beingDragged:
                 self.x = event.pos[0]
                 self.y = event.pos[1]
-                print("E")
 
 
 
@@ -47,24 +46,28 @@ class DraggableNumber(Draggable):
         self.font = pygame.font.SysFont("Impact", 36)
 
     def process_events(self,events):
-        super().process_events(events)
+        super().process_events(events,self.rect)
+        if self.recentlyActive[0]:
+            pygame.event.post(pygame.event.Event(constants.NUMDROP, {"pos": (self.recentlyActive[1],self.recentlyActive[2]), "num": self.num},pos=(self.recentlyActive[1],self.recentlyActive[2]),num=self.num))
+            self.recentlyActive = (False,None,None)
+
 
     def setSize(self,x,y,width,height):
         self.normalX = x
         self.normalY = y
-        self.rect.update(self.x,self.y,width,height)
+        self.rect.update(self.normalX,self.normalY,width,height)
 
         self.font.set_point_size(250)
         while self.font.get_height() > int(self.rect.height - (self.rect.height * 0.1)):
             self.font.point_size -= 1
 
         self.centerX = (self.rect.width - self.font.size(str(self.num))[0]) / 2
-        self.centerY = (self.rect.width - self.font.size(str(self.num))[1]) / 2
+        self.centerY = (self.rect.height - self.font.size(str(self.num))[1]) / 2
 
 
     def draw(self,screen):
-        x = self.rect.x - self.centerX if self.beingDragged else self.rect.x + self.centerX
-        y = self.rect.y - self.centerY if self.beingDragged else self.rect.y + self.centerY
+        x = self.x - (self.font.size(str(self.num))[0] / 2) if self.beingDragged else self.rect.x + self.centerX
+        y = self.y - (self.font.size(str(self.num))[1] / 2) if self.beingDragged else self.rect.y + self.centerY
         screen.blit(self.font.render(str(self.num),True,"black"),(x,y))
 
 class SudokuNumbers:
@@ -81,7 +84,7 @@ class SudokuNumbers:
         x = ((surface.get_width() - boardRect.width) / 2) + boardRect.width*0.025
         y = boardRect.y + boardRect.height + surface.get_height()*0.025
         width = boardRect.width*0.95
-        height = (surface.get_height() - y)*0.75
+        height = min((surface.get_height() - y)*0.75,surface.get_height()*0.2)
         self.rect.update(x,y,width,height)
 
         match self.numMax:

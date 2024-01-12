@@ -4,6 +4,7 @@ import pygame
 import pygame.gfxdraw
 from pygame import Window
 
+import constants
 from boardUtils import Board
 from guiUtils import DraggableNumber, SudokuNumbers
 
@@ -42,15 +43,14 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-four = DraggableNumber(4)
 nums = SudokuNumbers(size)
 
 while running:
     screen.fill("white")
 
-
     events = pygame.event.get()
     nums.process_events(events)
+    obj.process_events(events)
     for event in events:
         if event.type == pygame.QUIT:
             running = False
@@ -58,7 +58,6 @@ while running:
     obj.setSize(screen)
     nums.setSize(obj.rect, screen)
     obj.drawBoard(screen)
-
     nums.drawNumbers(screen)
 
     mainWindow.flip()
