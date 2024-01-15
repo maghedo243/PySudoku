@@ -16,7 +16,7 @@ from guiUtils import DraggableNumber, SudokuNumbers
 
 pygame.init()
 
-size = "1"
+size = "3"
 
 match size:
     case "1":
@@ -27,11 +27,6 @@ match size:
         size = 16
 
 obj = Board(size)
-obj.sections[(0,0)].cells[(0,0)].storedNum = 0
-obj.sections[(0,0)].cells[(0,1)].storedNum = 2
-obj.sections[(0,0)].cells[(1,0)].storedNum = 16
-obj.sections[(0,0)].cells[(1,1)].storedNum = 1
-obj.sections[(1,0)].cells[(1,1)].storedNum = 1
 
 mainWindow = Window("Sudoku",(500,625))
 screen = mainWindow.get_surface()

@@ -92,6 +92,23 @@ class SudokuNumbers:
                 numWidth = self.rect.width / 4
                 for i in range(4):
                     self.numbers[i].setSize(self.rect.x + (i*numWidth),self.rect.y,numWidth,self.rect.height)
+            case 9:
+                topRowWidth = self.rect.width / 5
+                bottomRowWidth = self.rect.width / 4
+                for i in range(5):
+                    self.numbers[i].setSize(self.rect.x + (i*topRowWidth),self.rect.y,topRowWidth,self.rect.height/2)
+
+                for i in range(4):
+                    self.numbers[i+5].setSize(self.rect.x + (i*bottomRowWidth),self.rect.y+(self.rect.height/2),bottomRowWidth,self.rect.height/2)
+            case 16:
+                numWidth = self.rect.width / 8
+                for i in range(8):
+                    self.numbers[i].setSize(self.rect.x + (i*numWidth),self.rect.y,numWidth,self.rect.height/2)
+
+                for i in range(8):
+                    self.numbers[i+8].setSize(self.rect.x + (i*numWidth),self.rect.y+(self.rect.height/2),numWidth,self.rect.height/2)
+
+
 
 
     def drawNumbers(self,surface: Surface):
