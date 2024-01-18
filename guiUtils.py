@@ -18,7 +18,7 @@ class Draggable:
 
     def process_events(self,events,rect):
         for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and rect.collidepoint(event.pos[0],event.pos[1]):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and rect.collidepoint(event.pos[0],event.pos[1]):
                 self.beingDragged = True
                 self.x = event.pos[0]
                 self.y = event.pos[1]

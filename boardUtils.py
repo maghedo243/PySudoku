@@ -23,6 +23,12 @@ class Board:
                     for cell in section.cells.values():
                         if cell.rect.collidepoint(event.pos[0],event.pos[1]):
                             cell.storedNum = event.num
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 3:
+                    for section in self.sections.values():
+                        for cell in section.cells.values():
+                            if cell.rect.collidepoint(event.pos[0], event.pos[1]):
+                                cell.storedNum = -1
 
 
     def setSize(self,surface: Surface):
